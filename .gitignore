@@ -126,4 +126,7 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node
 
 # Minio directory
-minio
+/minio
+
+# Docker env
+docker.env
