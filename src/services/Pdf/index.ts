@@ -4,10 +4,11 @@ import puppeteer from 'puppeteer';
 import ErrorCodes from '../../errors/AppErrorCodes';
 import InternalServerError from '../../errors/InternalServerError';
 
+import Minio from '../../infrastructure/minio';
+import Puppeteer from '../../infrastructure/puppeteer';
 import * as logger from '../../helpers/logger';
 import * as wrapper from '../../helpers/wrapper';
 import * as DTO from './service_model';
-import Minio from '../../infrastructure/minio';
 const context = 'Service-Pdf';
 
 export default class PdfService {
@@ -15,14 +16,10 @@ export default class PdfService {
   _minio: Minio = new Minio();
 
   public async GeneratePdfStore(payload: DTO.GeneratePdfStoreDto): Promise<wrapper.Wrapped<DTO.GeneratePdfResponseDto>> {
-    const browser = await puppeteer.launch({ args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage'
-    ]});
-    //const browser = await puppeteer.launch();
-
+    let browser: puppeteer.Browser | null = null;
     try {
+      browser = await Puppeteer.CreatePuppeteer();
+
       const page = await browser.newPage();
       await page.goto('https://google.com', {waitUntil: 'networkidle0'});
       const pdf = await page.pdf({ format: 'A4' });
@@ -40,18 +37,14 @@ export default class PdfService {
       throw new InternalServerError(ErrorCodes.InternalError, error);
     }
     finally {
-      await browser.close();
+      await browser?.close();
     }
   }
 
   public async GeneratePdfEphemeral(payload: DTO.GeneratePdfEphemeralDto): Promise<void> {
-    const browser = await puppeteer.launch({ args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage'
-    ]});
-
+    let browser: puppeteer.Browser | null = null;
     try {
+      browser = await Puppeteer.CreatePuppeteer();
       const page = await browser.newPage();
       await page.goto('https://google.com', {waitUntil: 'networkidle0'});
 
@@ -63,7 +56,7 @@ export default class PdfService {
       throw new InternalServerError(ErrorCodes.InternalError, error);
     }
     finally {
-      await browser.close();
+      await browser?.close();
     }
   }
 
