@@ -1,7 +1,6 @@
 dependencies:
   body-parser: 1.19.0
   dotenv: 8.2.0
-  eslint-config-google: 0.14.0_eslint@7.6.0
   express: 4.17.1
   joi: 17.2.0
   minio: 7.0.16
@@ -17,6 +16,8 @@ devDependencies:
   '@types/joi': 14.3.4
   '@types/minio': 7.0.6
   '@types/mustache-express': 1.2.1
+  '@types/node': 14.0.27
+  '@types/puppeteer': 3.0.1
   '@types/stream-to-array': 2.3.0
   '@types/uuid': 8.0.1
   '@typescript-eslint/eslint-plugin': 3.8.0_9195d7e59c976ef8295ee5e80b40ac89
@@ -146,6 +147,12 @@ packages:
   /@types/node/14.0.27:
     resolution:
       integrity: sha512-kVrqXhbclHNHGu9ztnAwSncIgJv/FaxmzXJvGXNdcCpV1b8u1/Mi6z6m0vwy0LzKeXFTPLH0NzwmoJ3fNCIq0g==
+  /@types/puppeteer/3.0.1:
+    dependencies:
+      '@types/node': 14.0.27
+    dev: true
+    resolution:
+      integrity: sha512-t03eNKCvWJXhQ8wkc5C6GYuSqMEdKLOX0GLMGtks25YZr38wKZlKTwGM/BoAPVtdysX7Bb9tdwrDS1+NrW3RRA==
   /@types/qs/6.9.4:
     dev: true
     resolution:
@@ -644,16 +651,6 @@ packages:
       node: '>=0.8.0'
     resolution:
       integrity: sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
-  /eslint-config-google/0.14.0_eslint@7.6.0:
-    dependencies:
-      eslint: 7.6.0
-    dev: false
-    engines:
-      node: '>=0.10.0'
-    peerDependencies:
-      eslint: '>=5.16.0'
-    resolution:
-      integrity: sha512-WsbX4WbjuMvTdeVL6+J3rK1RGhCTqjsFjX7UMSMgZiyxxaNLkoJENbrGExzERFeoTpGw3F3FypTiWAP9ZXzkEw==
   /eslint-scope/5.1.0:
     dependencies:
       esrecurse: 4.2.1
@@ -2024,6 +2021,8 @@ specifiers:
   '@types/joi': ^14.3.4
   '@types/minio': ^7.0.6
   '@types/mustache-express': ^1.2.1
+  '@types/node': ^14.0.27
+  '@types/puppeteer': ^3.0.1
   '@types/stream-to-array': ^2.3.0
   '@types/uuid': ^8.0.1
   '@typescript-eslint/eslint-plugin': ^3.8.0
@@ -2031,7 +2030,6 @@ specifiers:
   body-parser: ^1.19.0
   dotenv: ^8.2.0
   eslint: '>=5.16.0'
-  eslint-config-google: ^0.14.0
   express: ^4.17.1
   joi: ^17.2.0
   minio: ^7.0.16
