@@ -39,7 +39,8 @@ For the backend, I use 3-layer onion architecture.
 
 ## 🏃‍ Running locally
 
-You'll need Docker to run this app. Install docker, then:
+You'll need Docker to run this app. Create environment file, `docker.env` from `docker.env.example`.
+Install docker, then:
 
 ```
 docker-compose up
