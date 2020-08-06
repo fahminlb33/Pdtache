@@ -4,7 +4,6 @@ import config from '../config';
 export default class PuppeteerWrapper {
 
   static async CreatePuppeteer(): Promise<puppeteer.Browser> {
-
     if (config.isInDocker){
       return await puppeteer.launch({ args: [
         '--no-sandbox',
@@ -16,7 +15,6 @@ export default class PuppeteerWrapper {
     {
       return await puppeteer.launch();
     }
-
   }
 
 }

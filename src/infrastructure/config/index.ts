@@ -3,7 +3,7 @@ dotenv.config();
 
 export default {
   port: Number(process.env.PORT),
-  isInDocker: Boolean(process.env.IS_IN_DOCKERR),
+  isInDocker: process.env.IS_IN_DOCKER === 'true' ? true : false,
   logging: {
     level: String(process.env.LOGGING_LEVEL)
   },
