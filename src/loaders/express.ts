@@ -13,8 +13,9 @@ export default async ({app}: { app: express.Application }): Promise<express.Appl
   app.enable('trust proxy');
   app.set('views', `${__dirname}/../../views`);
   app.set('view engine', 'mustache');
-  app.engine('mustache', mustacheExpress(`${__dirname}/../../views`, '.mustache'));
+  app.engine('mustache', mustacheExpress(`${__dirname}/../../web/views`, '.mustache'));
 
+  app.use(express.static(`${__dirname}/../../web/assets`));
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
 
