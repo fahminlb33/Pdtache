@@ -6,7 +6,7 @@ services:
     ports:
       - "9000:9000"
     env_file:
-      - ./.env
+      - ./docker.env
     volumes:
       - ./minio:/data
 
@@ -30,4 +30,4 @@ services:
     ports:
       - "5000:5000"
     env_file:
-      - ./.env
+      - ./docker.env
