@@ -6,6 +6,7 @@
 
 ![Docker Image CI](https://github.com/fahminlb33/Pdtache/workflows/Docker%20Image%20CI/badge.svg?branch=master)
 ![Node.js CI](https://github.com/fahminlb33/Pdtache/workflows/Node.js%20CI/badge.svg?branch=master)
+[![codecov](https://codecov.io/gh/fahminlb33/Pdtache/branch/master/graph/badge.svg)](https://codecov.io/gh/fahminlb33/Pdtache)
 
 Pdtache is a PDF creator using `puppeteer` and `mustache` to render HTML into PDF.
 This app works as web app and also exposes several APIs to integrate to your apps.
