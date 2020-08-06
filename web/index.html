@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Fahmi Noor Fiqri">
+  <meta name="description" content="Pdtache is a tool to create PDFs from HTML with Mustache templating system.">
+
+  <title>Pdtache: NodeJS PDF Creator</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"
+    integrity="sha256-aPeK/N8IHpHsvPBCf49iVKMdusfobKo2oxF8lRruWJg=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css"
+    integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+  <style>
+    html,
+    body {
+      min-height: 100%;
+      background-color: hsl(171, 100%, 41%);
+      padding: 30px;
+      padding-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="app">
+
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            <i class="fas fa-file-pdf"></i> Pdtache
+          </h1>
+          <h2 class="subtitle">
+            NodeJS Mustache-based PDF creator.
+          </h2>
+        </div>
+      </div>
+    </section>
+
+    <div class="columns">
+
+      <div class="column">
+
+        <div class="box">
+          <p class="title"><i class="fas fa-file-pdf fa-fw"></i> Create PDF</p>
+          <div class="field">
+            <label class="label">HTML URL</label>
+            <div class="control">
+              <input class="input" type="number" v-model="html_url" :disabled="form_disabled">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">HTML Body</label>
+            <div class="control">
+              <textarea class="textarea" v-model="html_raw" :disabled="form_disabled"></textarea>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">View data</label>
+            <div class="control">
+              <textarea class="textarea" v-model="view_data" :disabled="form_disabled"></textarea>
+            </div>
+          </div>
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-link" v-on:click="create_pdf_store" :disabled="form_disabled">
+                <span class="icon">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span>Create and Store</span>
+              </button>
+            </div>
+            <div class="control">
+              <button class="button is-link" v-on:click="create_pdf_ephemeral" :disabled="form_disabled">
+                <span class="icon">
+                  <i class="fas fa-download"></i>
+                </span>
+                <span>Create and Download</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="column">
+
+        <div class="box">
+          <p class="title">
+            <i class="fas fa-desktop fa-fw"></i> Console
+            <button class="button is-link is-light" v-on:click="refresh_table" :disabled="refresh_disabled">
+              <span class="icon">
+                <i class="fas fa-sync"></i>
+              </span>
+              <span>Refresh</span>
+            </button>
+          </p>
+
+          <table class="table is-fullwidth">
+            <thead>
+              <tr>
+                <td>Id</td>
+                <td>Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in pdf_list">
+                <td><a :href="item.url">{{ item.id }}</a></td>
+                <td><button class="button is-danger is-light" v-on:click="delete_item(item.id)"
+                    :disabled="table_disabled">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="box">
+      <div class="container">
+        <p class="title"><i class="fas fa-terminal fa-fw"></i> APIs</p>
+        <p>Pdtache expose these following API for use in your application. <a href="http://github.com/fahminlb33/pdtache"><i class="fab fa-github fa-fw"></i> Fork me on GitHub</a></p>
+
+        <!-- generate_store -->
+        <div class="mt-4">
+          <hr>
+          <h4 class="title is-4">Generate and store PDF to storage</h4>
+          <p>Request:</p>
+          <pre v-pre>
+POST /pdf/generate_store
+Content-Type: application/json
+
+{
+  "html_url": "http://example.com/template.html",
+  "html_raw": "Hello {{ name }}",
+  "body": {
+    "name": "Fahmi"
+  }
+}</pre>
+
+          <p>Response:</p>
+          <pre v-pre>
+200 OK
+Content-Type: application/json
+
+{
+  "success": true,
+  "appCode": 1,
+  "message": "Request has been processed",
+  "data": {
+      "id": "aff391af-5e9a-4e3d-86e0-c7af3c75153b.pdf",
+      "url": "http://localhost:9000/pdtache/aff391af-5e9a-4e3d-86e0-c7af3c75153b.pdf"
+  }
+}</pre>
+
+          <p>Note: You can use either <code>html_url</code> or <code>html_raw</code>, but <code>html_url</code> is
+            prioritized than <code>html_raw</code>.</p>
+        </div>
+
+        <!-- generate_ephemeral -->
+        <div class="mt-4">
+          <hr>
+          <h4 class="title is-4">Generate and download PDF</h4>
+          <p>Request:</p>
+          <pre v-pre>
+POST /pdf/generate_ephemeral
+Content-Type: application/json
+
+{
+  "html_url": "http://example.com/template.html",
+  "html_raw": "Hello {{ name }}",
+  "body": {
+    "name": "Fahmi"
+  }
+}</pre>
+
+          <p>Response:</p>
+          <pre v-pre>
+200 OK
+Content-Type: application/pdf
+
+...binary data...</pre>
+
+          <p>Note: The input is the same as in <code>generate_store</code>, but the response is binary PDF data.</p>
+        </div>
+
+        <!-- list pdf -->
+        <div class="mt-4">
+          <hr>
+          <h4 class="title is-4">List PDF on storage</h4>
+          <p>Request:</p>
+          <pre v-pre>GET /pdf</pre>
+
+          <p>Response:</p>
+<pre v-pre>
+200 OK
+Content-Type: application/json
+
+{
+  "success": true,
+  "appCode": 1,
+  "message": "Request has been processed",
+  "data": {
+      "items": [
+          {
+              "id": "aff391af-5e9a-4e3d-86e0-c7af3c75153b.pdf",
+              "url": "http://localhost:9000/pdtache/aff391af-5e9a-4e3d-86e0-c7af3c75153b.pdf"
+          },
+          {
+              "id": "d555fad6-a869-4720-b9d7-521ab4a5892a.pdf",
+              "url": "http://localhost:9000/pdtache/d555fad6-a869-4720-b9d7-521ab4a5892a.pdf"
+          }
+      ]
+  }
+}</pre>
+        </div>
+
+        <!-- delete pdf -->
+        <div class="mt-4">
+          <hr>
+          <h4 class="title is-4">Delete PDF on storage</h4>
+          <p>Request:</p>
+          <pre v-pre>DELETE /pdf/:documentId</pre>
+
+          <p>Response:</p>
+<pre v-pre>
+200 OK
+Content-Type: application/json
+
+{
+  "success": true,
+  "appCode": 1,
+  "message": "Request has been processed"
+}</pre>
+        </div>
+
+        <h3 class="title is-3">Errors</h3>
+        <p>If an error is occured, you can check at the <code>message</code> property for more information.</p>
+      </div> <!-- end container -->
+
+    </div> <!-- end box -->
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
