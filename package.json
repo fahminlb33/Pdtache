@@ -11,7 +11,7 @@
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "jest tests/* --colors",
     "cover": "jest tests/* --coverage --colors",
-    "ci": "jest tests/* --ci --coverage && codecov"
+    "ci": "jest tests/* --ci --coverage"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
