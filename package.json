@@ -10,8 +10,7 @@
     "start": "tsc && node ./dist/index.js",
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "jest tests/* --colors",
-    "coverage": "jest tests/* --coverage --colors",
-    "open-coverage": "jest tests/* --coverage --colors && start coverage/lcov-report/index.html"
+    "cover": "jest tests/* --coverage --colors"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
