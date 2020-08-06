@@ -1,5 +1,7 @@
 import {v4 as uuid} from 'uuid';
 import puppeteer from 'puppeteer';
+import mustache from 'mustache';
+import fetch from 'node-fetch';
 
 import ErrorCodes from '../../errors/AppErrorCodes';
 import InternalServerError from '../../errors/InternalServerError';
@@ -18,10 +20,19 @@ export default class PdfService {
   public async GeneratePdfStore(payload: DTO.GeneratePdfStoreDto): Promise<wrapper.Wrapped<DTO.GeneratePdfResponseDto>> {
     let browser: puppeteer.Browser | null = null;
     try {
-      browser = await Puppeteer.CreatePuppeteer();
+      let htmlBody: string = '';
+      if (payload.html_url !== null) {
+        const response = await fetch(payload.html_url);
+        htmlBody = await response.text();
+      }
+      else
+      {
+        htmlBody = payload.html_raw!;
+      }
 
+      browser = await Puppeteer.CreatePuppeteer();
       const page = await browser.newPage();
-      await page.goto('https://google.com', {waitUntil: 'networkidle0'});
+      await page.setContent(mustache.render(htmlBody, payload.body));
       const pdf = await page.pdf({ format: 'A4' });
 
       const id = `${uuid()}.pdf`;
@@ -44,11 +55,21 @@ export default class PdfService {
   public async GeneratePdfEphemeral(payload: DTO.GeneratePdfEphemeralDto): Promise<void> {
     let browser: puppeteer.Browser | null = null;
     try {
+      let htmlBody: string = '';
+      if (payload.html_url !== null) {
+        const response = await fetch(payload.html_url);
+        htmlBody = await response.text();
+      }
+      else
+      {
+        htmlBody = payload.html_raw!;
+      }
+
       browser = await Puppeteer.CreatePuppeteer();
       const page = await browser.newPage();
-      await page.goto('https://google.com', {waitUntil: 'networkidle0'});
-
+      await page.setContent(mustache.render(htmlBody, payload.body));
       const pdf = await page.pdf({ format: 'A4' });
+
       payload.expressResponse.contentType('application/pdf');
       payload.expressResponse.send(pdf);
     } catch (error) {
