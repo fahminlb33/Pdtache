@@ -21,8 +21,8 @@ export default class PdfService {
     let browser: puppeteer.Browser | null = null;
     try {
       let htmlBody: string = '';
-      if (payload.html_url !== null) {
-        const response = await fetch(payload.html_url);
+      if (payload.html_url) {
+        const response = await fetch(payload.html_url!);
         htmlBody = await response.text();
       }
       else
@@ -44,8 +44,9 @@ export default class PdfService {
         url: this._minio.GetUrl(id)
       })
     } catch (error) {
+      console.log(error);
       logger.error(`${context}:GeneratePdfStore`, 'Error when generating PDF', error);
-      throw new InternalServerError(ErrorCodes.InternalError, error);
+      throw new InternalServerError(ErrorCodes.InternalError, error.toString());
     }
     finally {
       await browser?.close();
@@ -56,8 +57,8 @@ export default class PdfService {
     let browser: puppeteer.Browser | null = null;
     try {
       let htmlBody: string = '';
-      if (payload.html_url !== null) {
-        const response = await fetch(payload.html_url);
+      if (payload.html_url) {
+        const response = await fetch(payload.html_url!);
         htmlBody = await response.text();
       }
       else
@@ -74,7 +75,7 @@ export default class PdfService {
       payload.expressResponse.send(pdf);
     } catch (error) {
       logger.error(`${context}:GeneratePdfEphemeral`, 'Error when generating PDF', error);
-      throw new InternalServerError(ErrorCodes.InternalError, error);
+      throw new InternalServerError(ErrorCodes.InternalError, error.toString());
     }
     finally {
       await browser?.close();
