@@ -1,5 +1,7 @@
 # Pdtache📄
 
+![Image of Yaktocat](https://github.com/fahminlb33/Pdtache/blob/master/.github/screenshot.png?raw=true)
+
 **🚧I need help to add unit test to this app🚧**
 
 Pdtache is a PDF creator using `puppeteer` and `mustache` to render HTML into PDF.
