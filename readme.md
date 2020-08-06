@@ -4,6 +4,9 @@
 
 **🚧I need help to add unit test to this app🚧**
 
+![Docker Image CI](https://github.com/fahminlb33/Pdtache/workflows/Docker%20Image%20CI/badge.svg?branch=master)
+![Node.js CI](https://github.com/fahminlb33/Pdtache/workflows/Node.js%20CI/badge.svg?branch=master)
+
 Pdtache is a PDF creator using `puppeteer` and `mustache` to render HTML into PDF.
 This app works as web app and also exposes several APIs to integrate to your apps.
 Comes with built-in Minio integration and it's 🐳Docker ready.
