@@ -1,4 +1,3 @@
-import {v4 as uuid} from 'uuid';
 import puppeteer from 'puppeteer';
 import mustache from 'mustache';
 import fetch from 'node-fetch';
@@ -35,9 +34,11 @@ export default class PdfService {
       await page.setContent(mustache.render(htmlBody, payload.body));
       const pdf = await page.pdf({ format: 'A4' });
 
-      const id = `${uuid()}.pdf`;
+      const todayDate = new Date();
+      const id = `${todayDate.getTime()}_${todayDate.getMonth()}-${todayDate.getDay()}\
+        T${todayDate.getHours()}${todayDate.getMinutes()}${todayDate.getSeconds()}.pdf`;
+
       await this._minio.Save(id, pdf);
-      console.log(payload.body);
 
       return wrapper.data({
         id: id,
