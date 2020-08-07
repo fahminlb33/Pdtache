@@ -10,10 +10,19 @@ parserOptions:
   sourceType: module
 plugins:
   - '@typescript-eslint'
-rules: {
-  indent: ['error', 2],
-  semi: 'off',
-  no-trailing-spaces: ['warning'],
-  no-console: ['error'],
-  '@typescript-eslint/semi': ['error', 2]
-}
+rules:
+  indent:
+    - error
+    - 2
+  semi:
+    - off
+    - always
+  no-trailing-spaces:
+    - warning
+    - always
+  no-console:
+    - error
+    - always
+  '@typescript-eslint/semi':
+    - error
+    - always
